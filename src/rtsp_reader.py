@@ -1,3 +1,5 @@
+import threading
+
 import cv2
 
 from src.frames.frames_manager import FramesManager
@@ -9,14 +11,26 @@ class RtspReader:
         self._frames = []
         self._frame_rate = frame_rate
         self._rtsp_url = rtsp_url
-        self.initialize_connection()
+        self._frames_manager = frames_manager
+        self._capture_thread = None
+        self._running = True
+        self.initialize_capture()
 
-    def initialize_connection(self):
+    def initialize_capture(self):
         self._capture = cv2.VideoCapture(self._rtsp_url)
-        count = 0
+        self._capture_thread = threading.Thread(target=self.run_capture, args=(self,))
+        self._capture_thread.run()
 
-        while self._capture.isOpened():
+    def stop_capture(self):
+        if self._capture_thread:
+            self._running = False
+            self._capture_thread.join()
+
+    def run_capture(self):
+        count = 0
+        while self._capture.isOpened() and self._running:
             ret, frame = self._capture.read()
+            self._frames_manager.handle_frame(frame)
 
             if ret:
                 count += self._frame_rate

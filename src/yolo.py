@@ -25,15 +25,15 @@ class Yolo:
         self._is_running = True
         image = cv2.imread(image)
 
-        Width = image.shape[1]
-        Height = image.shape[0]
+        width = image.shape[1]
+        height = image.shape[0]
         scale = 0.00392
 
         blob = cv2.dnn.blobFromImage(image, scale, (416, 416), (0, 0, 0), True, crop=False)
         self._net.setInput(blob)
         outs = self._net.forward(self.get_output_layers())
 
-        scores = self.get_scores(outs, Width, Height)
+        scores = self.get_scores(outs, width, height)
         self._is_running = False
         return scores
 

@@ -1,10 +1,11 @@
-from ast import arg
 import json
+
 from flask import Response
 
 from .config_manager import ConfigManager
 
-class ConfigReloader():
+
+class ConfigReloader:
     def __init__(self, config_manager: ConfigManager):
         self._config_manager = config_manager
         self.response = Response(status=200, headers={})
