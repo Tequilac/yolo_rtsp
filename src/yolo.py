@@ -1,17 +1,33 @@
+import time
+
 import cv2
 import numpy as np
 
+from src.frames.frame import FrameInfo
+
 
 class Yolo:
-    def __init__(self) -> None:
+    def __init__(self, frames_to_analyze: list, result_callback) -> None:
         self._classes_file = "../res/files/yolov3.txt"
         self._net_config_file = "../res/files/yolov3.cfg"
         self._weights_file = "../res/files/yolov3.weights"
         self._net = cv2.dnn.readNet(self._weights_file, self._net_config_file)
         self._classes = None
         self._is_running = False
+        self._stopped = False
+        self._frames_to_analyze = frames_to_analyze
+        self._result_callback = result_callback
         with open(self._classes_file, 'r') as f:
             self._classes = [line.strip() for line in f.readlines()]
+
+    def run_analyzing(self):
+        while True:
+            if not self._is_running and len(self._frames_to_analyze) != 0 and not self._stopped:
+                self.analyze_image(self._frames_to_analyze.pop(0))
+            elif not self._stopped:
+                time.sleep(0.1)
+            else:
+                return
 
     def get_output_layers(self):
 
@@ -21,9 +37,9 @@ class Yolo:
 
         return output_layers
 
-    def analyze_image(self, image):
+    def analyze_image(self, frame_info: FrameInfo):
         self._is_running = True
-        image = cv2.imread(image)
+        image = cv2.imread(frame_info['frame'])
 
         width = image.shape[1]
         height = image.shape[0]
@@ -34,8 +50,8 @@ class Yolo:
         outs = self._net.forward(self.get_output_layers())
 
         scores = self.get_scores(outs, width, height)
+        self._result_callback(frame_info, scores)
         self._is_running = False
-        return scores
 
     def get_scores(self, outs, width, height):
         classes = []
@@ -63,3 +79,6 @@ class Yolo:
 
     def is_running(self) -> bool:
         return self._is_running
+
+    def stop(self):
+        self._stopped = True

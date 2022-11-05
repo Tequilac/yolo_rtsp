@@ -7,7 +7,11 @@ class FrameStrategy:
 
 
 class MqttInfo(TypedDict):
-    address: str
+    client_id: str
+    username: str
+    password: str
+    broker: str
+    port: int
     topic: str
 
 

@@ -8,7 +8,6 @@ from src.frames.frames_manager import FramesManager
 class RtspReader:
     def __init__(self, frame_rate: int, rtsp_url: str, frames_manager: FramesManager) -> None:
         self._capture = None
-        self._frames = []
         self._frame_rate = frame_rate
         self._rtsp_url = rtsp_url
         self._frames_manager = frames_manager
