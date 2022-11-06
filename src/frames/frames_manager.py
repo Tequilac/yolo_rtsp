@@ -5,7 +5,7 @@ from paho.mqtt import client as mqtt_client
 
 from src.config.types import FrameStrategy, MqttInfo
 from src.frames.frame import FrameInfo
-from src.yolo import Yolo
+from src.frames.yolo import Yolo
 
 
 def generate_detected_objects_info(result):
@@ -29,7 +29,7 @@ class FramesManager:
         self._yolo = Yolo(self._stored_frames, self.result_callback)
         self._frame_strategy = frame_strategy
         self._mqtt_info = mqtt_info
-        self._mqtt_client = self.connect_mqtt()
+        self._mqtt_client = self.connect_mqtt() if mqtt_info else None
         self._yolo_thread = threading.Thread(target=self._yolo.run_analyzing, args=(self._yolo,))
         self._yolo_thread.run()
 
@@ -48,7 +48,7 @@ class FramesManager:
             self._stored_frames.append(frame_info)
 
     def connect_mqtt(self):
-        def on_connect(_, _, _, rc):
+        def on_connect(client_instance, userdata, flags, rc):
             if rc == 0:
                 print("Connected to MQTT broker")
             else:
@@ -65,14 +65,16 @@ class FramesManager:
             'timestamp': frame_info['timestamp'],
             'detected_objects': generate_detected_objects_info(result)
         }
-        result = self._mqtt_client.publish(self._mqtt_info['topic'], msg)
-        # result: [0, 1]
-        status = result[0]
-        if status == 0:
-            print(f"Send message to MQTT topic")
-        else:
-            print(f"Failed to send message to MQTT topic")
+        if self._mqtt_client:
+            result = self._mqtt_client.publish(self._mqtt_info['topic'], msg)
+            # result: [0, 1]
+            status = result[0]
+            if status == 0:
+                print(f"Send message to MQTT topic")
+            else:
+                print(f"Failed to send message to MQTT topic")
 
     def stop(self):
         self.stop_yolo()
-        self._mqtt_client.disconnect()
+        if self._mqtt_client:
+            self._mqtt_client.disconnect()
