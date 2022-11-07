@@ -3,7 +3,7 @@ import time
 import cv2
 import numpy as np
 
-from src.frames.frame import FrameInfo
+from .frame import FrameInfo
 
 
 class Yolo:

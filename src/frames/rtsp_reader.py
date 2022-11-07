@@ -2,7 +2,7 @@ import threading
 
 import cv2
 
-from src.frames.frames_manager import FramesManager
+from .frames_manager import FramesManager
 
 
 class RtspReader:

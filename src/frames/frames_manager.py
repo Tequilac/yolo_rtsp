@@ -3,9 +3,9 @@ from datetime import datetime
 
 from paho.mqtt import client as mqtt_client
 
-from src.config.types import FrameStrategy, MqttInfo
-from src.frames.frame import FrameInfo
-from src.frames.yolo import Yolo
+from ..config.types import FrameStrategy, MqttInfo
+from .frame import FrameInfo
+from .yolo import Yolo
 
 
 def generate_detected_objects_info(result):
