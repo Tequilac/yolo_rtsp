@@ -1,12 +1,14 @@
-from typing import TypedDict
+from dataclasses import dataclass
+from enum import Enum
 
 
-class FrameStrategy:
-    DROP = 0
-    STORE = 1
+class FrameStrategy(Enum):
+    DROP = 'DROP'
+    STORE = 'STORE'
 
 
-class MqttInfo(TypedDict):
+@dataclass
+class MqttInfo:
     client_id: str
     username: str
     password: str
@@ -15,7 +17,8 @@ class MqttInfo(TypedDict):
     topic: str
 
 
-class Config(TypedDict):
+@dataclass
+class Config:
     frame_rate: int
     rtsp_url: str
     mqtt_info: MqttInfo

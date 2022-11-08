@@ -2,3 +2,4 @@ Flask
 numpy
 opencv-python
 paho-mqtt
+PyYAML

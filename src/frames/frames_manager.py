@@ -54,19 +54,19 @@ class FramesManager:
             else:
                 print("Failed to connect to MQTT broker, return code %d\n", rc)
         # Set Connecting Client ID
-        client = mqtt_client.Client(self._mqtt_info['client_id'])
-        client.username_pw_set(self._mqtt_info['username'], self._mqtt_info['password'])
+        client = mqtt_client.Client(self._mqtt_info.client_id)
+        client.username_pw_set(self._mqtt_info.username, self._mqtt_info.password)
         client.on_connect = on_connect
-        client.connect(self._mqtt_info['broker'], self._mqtt_info['port'])
+        client.connect(self._mqtt_info.broker, self._mqtt_info.port)
         return client
 
     def result_callback(self, frame_info: FrameInfo, result):
         msg = {
-            'timestamp': frame_info['timestamp'],
+            'timestamp': frame_info.timestamp,
             'detected_objects': generate_detected_objects_info(result)
         }
         if self._mqtt_client:
-            result = self._mqtt_client.publish(self._mqtt_info['topic'], msg)
+            result = self._mqtt_client.publish(self._mqtt_info.topic, msg)
             # result: [0, 1]
             status = result[0]
             if status == 0:

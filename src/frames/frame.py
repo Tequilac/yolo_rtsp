@@ -1,7 +1,8 @@
 from datetime import datetime
-from typing import TypedDict
+from dataclasses import dataclass
 
 
-class FrameInfo(TypedDict):
+@dataclass
+class FrameInfo:
     frame: object
     timestamp: datetime
