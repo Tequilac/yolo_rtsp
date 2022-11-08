@@ -1,13 +1,12 @@
 ---
 
-config:
-  frame_rate: 30
-  rtsp_url: url
-  mqtt_info:
-    client_id: id-1000
-    username: admin
-    password: admin
-    broker: broker
-    port: 6000
-    topic: yolo
-  frame_strategy: DROP
+frame_rate: 30
+rtsp_url: url
+mqtt_info:
+  client_id: id-1000
+  username: admin
+  password: admin
+  broker: broker
+  port: 6000
+  topic: yolo
+frame_strategy: DROP

@@ -8,9 +8,9 @@ from .frame import FrameInfo
 
 class Yolo:
     def __init__(self, frames_to_analyze: list, result_callback) -> None:
-        self._classes_file = "../res/files/yolov3.txt"
-        self._net_config_file = "../res/files/yolov3.cfg"
-        self._weights_file = "../res/files/yolov3.weights"
+        self._classes_file = "yolo-rtsp/res/files/yolov3.txt"
+        self._net_config_file = "yolo-rtsp/res/files/yolov3.cfg"
+        self._weights_file = "yolo-rtsp/res/files/yolov3.weights"
         self._net = cv2.dnn.readNet(self._weights_file, self._net_config_file)
         self._classes = None
         self._is_running = False
