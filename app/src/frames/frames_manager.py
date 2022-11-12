@@ -30,8 +30,8 @@ class FramesManager:
         self._frame_strategy = frame_strategy
         self._mqtt_info = mqtt_info
         self._mqtt_client = self.connect_mqtt() if mqtt_info else None
-        self._yolo_thread = threading.Thread(target=self._yolo.run_analyzing, args=(self._yolo,))
-        self._yolo_thread.run()
+        self._yolo_thread = threading.Thread(target=self._yolo.run_analyzing, args=())
+        self._yolo_thread.start()
 
     def stop_yolo(self):
         if self._yolo_thread:
@@ -54,11 +54,14 @@ class FramesManager:
             else:
                 print("Failed to connect to MQTT broker, return code %d\n", rc)
         # Set Connecting Client ID
-        client = mqtt_client.Client(self._mqtt_info.client_id)
-        client.username_pw_set(self._mqtt_info.username, self._mqtt_info.password)
-        client.on_connect = on_connect
-        client.connect(self._mqtt_info.broker, self._mqtt_info.port)
-        return client
+        try:
+            client = mqtt_client.Client(self._mqtt_info.client_id)
+            client.username_pw_set(self._mqtt_info.username, self._mqtt_info.password)
+            client.on_connect = on_connect
+            client.connect(self._mqtt_info.broker, self._mqtt_info.port)
+            return client
+        except Exception:
+            return None
 
     def result_callback(self, frame_info: FrameInfo, result):
         msg = {
@@ -73,6 +76,8 @@ class FramesManager:
                 print(f"Send message to MQTT topic")
             else:
                 print(f"Failed to send message to MQTT topic")
+        else:
+            print(msg)
 
     def stop(self):
         self.stop_yolo()

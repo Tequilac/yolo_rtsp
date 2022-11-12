@@ -11,13 +11,13 @@ def conf_from_obj(conf) -> Config:
         broker=info['broker'], port=info['port'], topic=info['topic']
     )
     return Config(
-        frame_rate=conf['frame_rate'], rtsp_url=conf['rtsp_url'], mqtt_info=mqtt_info,
-        frame_strategy=FrameStrategy[conf['frame_strategy']]
+        frame_rate_timeout=conf['frame_rate_timeout'], rtsp_url=conf['rtsp_url'],
+        mqtt_info=mqtt_info, frame_strategy=FrameStrategy[conf['frame_strategy']]
     )
 
 
 def load_from_file():
-    file_path = 'yolo-rtsp\\res\\config\\conf.yaml'
+    file_path = 'app\\res\\config\\conf.yaml'
     with open(file_path, 'r') as stream:
         conf = yaml.safe_load(stream)
     return conf
@@ -40,4 +40,4 @@ class ConfigManager:
         if self._frames_manager:
             self._frames_manager.stop()
         self._frames_manager = FramesManager(config.frame_strategy, config.mqtt_info)
-        self._rtsp_reader = RtspReader(config.frame_rate, config.rtsp_url, self._frames_manager)
+        self._rtsp_reader = RtspReader(config.frame_rate_timeout, config.rtsp_url, self._frames_manager)
