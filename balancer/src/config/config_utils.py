@@ -1,7 +1,6 @@
-from .types import Config, FrameStrategy, MqttInfo, Stream
 import yaml
 
-from ..streams.streams_manager import StreamsManager
+from .types import Config, FrameStrategy, MqttInfo, Stream
 
 
 def conf_from_obj(conf) -> Config:
@@ -26,14 +25,3 @@ def load_from_file():
     with open(file_path, 'r') as stream:
         conf = yaml.safe_load(stream)
     return conf
-
-
-class ConfigManager:
-
-    def __init__(self) -> None:
-        self._streams_manager = None
-        self.reload_config(load_from_file())
-
-    def reload_config(self, conf):
-        config = conf_from_obj(conf)
-        self._streams_manager = StreamsManager(config)
