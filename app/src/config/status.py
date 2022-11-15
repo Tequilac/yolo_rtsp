@@ -1,29 +1,8 @@
-from datetime import datetime
 import uuid
 from dataclasses import dataclass
 from enum import Enum
 
-from balancer.src.config.types import Stream
-
-
-class StreamStatus:
-    name: str
-
-
-class Free(StreamStatus):
-    name = 'FREE'
-
-
-@dataclass
-class Taken(StreamStatus):
-    name = 'TAKEN'
-    app_id: uuid.UUID
-
-
-@dataclass
-class Active:
-    app_id: uuid.UUID
-    last_contact_time: datetime
+from app.src.config.types import Config
 
 
 class Status(Enum):
@@ -55,7 +34,7 @@ class Ditch(Operation):
 @dataclass
 class New(Operation):
     name = 'NEW'
-    config: Stream
+    config: Config
 
 
 @dataclass

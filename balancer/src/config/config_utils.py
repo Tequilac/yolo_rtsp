@@ -14,14 +14,14 @@ def conf_from_obj(conf) -> Config:
             broker=info['broker'], port=info['port'], topic=info['topic']
         )
         streams_conf.append(Stream(
-            frame_rate_timeout=conf['frame_rate_timeout'], rtsp_url=conf['rtsp_url'],
-            mqtt_info=mqtt_info, frame_strategy=FrameStrategy[conf['frame_strategy']],
+            frame_rate_timeout=stream['frame_rate_timeout'], rtsp_url=stream['rtsp_url'],
+            mqtt_info=mqtt_info, frame_strategy=FrameStrategy[stream['frame_strategy']],
         ))
     return Config(streams=streams_conf)
 
 
 def load_from_file():
-    file_path = 'app\\res\\config\\conf.yaml'
+    file_path = 'balancer\\res\\config\\conf.yaml'
     with open(file_path, 'r') as stream:
         conf = yaml.safe_load(stream)
     return conf

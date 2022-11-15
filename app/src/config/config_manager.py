@@ -1,3 +1,10 @@
+import json
+import os
+import uuid
+
+import requests
+
+from .status import Request, Status
 from .types import Config, FrameStrategy, MqttInfo
 from ..frames.frames_manager import FramesManager
 from ..frames.rtsp_reader import RtspReader
@@ -26,6 +33,9 @@ def load_from_file():
 class ConfigManager:
 
     def __init__(self) -> None:
+        self._id = uuid.uuid4()
+        self._balancer_url = os.environ['BALANCER_URL']
+        self._has_config = False
         self._frames_manager = None
         self._rtsp_reader = None
         self._mqtt_info = None
@@ -33,8 +43,14 @@ class ConfigManager:
         self._frame_rate = None
         self.reload_config(load_from_file())
 
+
+
+    def check_for_config_reload(self):
+        status = Status.BUSY if self._has_config else Status.READY
+        response = requests.get(self._balancer_url, json=json.dumps(Request(status=status, app_id=self._id)))
+
     def reload_config(self, conf):
-        config = conf_from_obj(conf)
+        config = get_config(conf)
         if self._rtsp_reader:
             self._rtsp_reader.stop_capture()
         if self._frames_manager:
