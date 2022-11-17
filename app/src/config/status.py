@@ -18,23 +18,23 @@ class Request:
 
 @dataclass
 class Operation:
-    pass
+    name: str
 
 
 @dataclass
 class Keep(Operation):
-    name = 'KEEP'
+    name: str = 'KEEP'
 
 
 @dataclass
 class Ditch(Operation):
-    name = 'DITCH'
+    name: str = 'DITCH'
 
 
 @dataclass
 class New(Operation):
-    name = 'NEW'
     config: Config
+    name: str = 'NEW'
 
 
 @dataclass
