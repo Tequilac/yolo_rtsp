@@ -15,7 +15,7 @@ def conf_from_obj(conf) -> Config:
         )
         streams_conf.append(Stream(
             frame_rate_timeout=stream['frame_rate_timeout'], rtsp_url=stream['rtsp_url'],
-            mqtt_info=mqtt_info, frame_strategy=FrameStrategy[stream['frame_strategy']],
+            mqtt_info=mqtt_info, frame_strategy=FrameStrategy[stream['frame_strategy']].name,
         ))
     return Config(streams=streams_conf)
 

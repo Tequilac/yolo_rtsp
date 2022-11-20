@@ -1,6 +1,6 @@
 import json
 
-from flask import Response
+from flask import Response, request
 
 from balancer.src.streams.streams_service import StreamsService
 
@@ -11,6 +11,8 @@ class StreamsCaller:
         self.response = Response(status=200, headers={})
 
     def __call__(self, *args):
-        params = json.loads(args[0])
+        print('Received request: ' + request.json)
+        params = json.loads(request.json)
         resp = self._streams_service.handle_request(params)
-        return Response(status=200, headers={}, response=json.dumps(resp))
+        print(resp)
+        return Response(status=200, headers={}, response=json.dumps(resp, default=lambda o: o.__dict__))

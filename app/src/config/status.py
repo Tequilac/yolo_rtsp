@@ -12,7 +12,7 @@ class Status(Enum):
 
 @dataclass
 class Request:
-    status: Status
+    status: str
     app_id: uuid.UUID
 
 
@@ -33,8 +33,8 @@ class Ditch(Operation):
 
 @dataclass
 class New(Operation):
-    config: Config
     name: str = 'NEW'
+    config: Config = None
 
 
 @dataclass

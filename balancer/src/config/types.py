@@ -22,7 +22,7 @@ class Stream:
     frame_rate_timeout: float
     rtsp_url: str
     mqtt_info: MqttInfo
-    frame_strategy: FrameStrategy
+    frame_strategy: str
 
 
 @dataclass

@@ -1,6 +1,6 @@
 import json
 
-from flask import Response
+from flask import Response, request
 
 from ..streams.streams_service import StreamsService
 
@@ -11,6 +11,6 @@ class ConfigReloader:
         self.response = Response(status=200, headers={})
 
     def __call__(self, *args):
-        params = json.loads(args[0])
+        params = json.loads(request.json)
         self._streams_service.reload_config(params)
         return self.response

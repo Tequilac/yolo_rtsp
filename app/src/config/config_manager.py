@@ -25,12 +25,13 @@ def conf_from_obj(conf) -> Config:
 
 
 def response_from_obj(resp) -> Response:
-    operation_name = resp['operation']['name']
-    if operation_name == 'KEEP':
+    operation = resp['operation']['name']
+    print(operation)
+    if operation == 'KEEP':
         return Response(operation=Keep())
-    elif operation_name == 'DITCH':
+    elif operation == 'DITCH':
         return Response(operation=Ditch())
-    elif operation_name == 'NEW':
+    elif operation == 'NEW':
         conf = resp['operation']['config']
         return Response(operation=New(config=conf_from_obj(conf)))
 
@@ -55,17 +56,17 @@ class ConfigManager:
 
     def request_for_config(self):
         status = Status.BUSY if self._has_config else Status.READY
-        request = Request(status=status, app_id=self._id)
-        resp = requests.get(self._balancer_url, json=json.dumps(request))
+        request = Request(status=status.name, app_id=self._id)
+        resp = requests.get(f'{self._balancer_url}/streams', json=json.dumps(request.__dict__, default=str))
         if resp.ok:
-            obj = json.loads(resp.json())
-            operation = response_from_obj(obj).operation
+            response = response_from_obj(resp.json())
+            operation = response.operation
             if operation.name == 'KEEP':
                 return
             elif operation.name == 'DITCH':
                 self.ditch_current()
             elif operation.name == 'NEW':
-                self.reload_config(cast(operation, New).config)
+                self.reload_config(operation.config)
 
     def ditch_current(self):
         self._frames_manager = None
@@ -76,5 +77,6 @@ class ConfigManager:
             self._rtsp_reader.stop_capture()
         if self._frames_manager:
             self._frames_manager.stop()
+        print(config)
         self._frames_manager = FramesManager(config.frame_strategy, config.mqtt_info)
         self._rtsp_reader = RtspReader(config.frame_rate_timeout, config.rtsp_url, self._frames_manager)
