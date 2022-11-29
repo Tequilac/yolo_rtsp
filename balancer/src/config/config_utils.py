@@ -21,7 +21,7 @@ def conf_from_obj(conf) -> Config:
 
 
 def load_from_file():
-    file_path = 'balancer\\res\\config\\conf.yaml'
+    file_path = '/balancer/res/config/conf.yaml'
     with open(file_path, 'r') as stream:
         conf = yaml.safe_load(stream)
     return conf

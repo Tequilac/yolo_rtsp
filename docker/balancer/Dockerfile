@@ -6,4 +6,5 @@ ADD balancer /balancer/
 RUN python3 -m pip install -r /balancer/requirements.txt
 
 EXPOSE 8081
+WORKDIR "/"
 CMD ["python3", "-m", "balancer"]

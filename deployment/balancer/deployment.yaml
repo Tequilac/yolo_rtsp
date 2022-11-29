@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: balancer-deployment
+  labels:
+    app: balancer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: balancer
+  template:
+    metadata:
+      labels:
+        app: balancer
+    spec:
+      containers:
+        - name: balancer
+          image: tequilac/balancer:latest
+          imagePullPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: balancer
+spec:
+  selector:
+    app.kubernetes.io/name: balancer
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
