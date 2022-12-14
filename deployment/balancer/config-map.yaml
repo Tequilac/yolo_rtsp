@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: balancer-cf
+data:
+  conf.yaml: |
+    ---
+    streams:
+    - frame_rate_timeout: 1
+      rtsp_url: url
+      frame_strategy: DROP
+      mqtt_info:
+        client_id: id-1000
+        username: admin
+        password: admin
+        broker: broker
+        port: 6000
+        topic: yolo

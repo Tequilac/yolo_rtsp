@@ -5,7 +5,7 @@ metadata:
   labels:
     app: app
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: app
@@ -18,3 +18,6 @@ spec:
         - name: app
           image: tequilac/app:latest
           imagePullPolicy: Always
+          env:
+            - name: BALANCER_URL
+              value: http://balancer.default.svc.cluster.local:8081
