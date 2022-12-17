@@ -4,6 +4,7 @@ import time
 import cv2
 
 from .frames_manager import FramesManager
+from ..logger import logger
 
 
 class RtspReader:
@@ -35,5 +36,5 @@ class RtspReader:
                 time.sleep(self._frame_rate_timeout)
             else:
                 self._capture.release()
-                print("Failed to read frames")
+                logger.warn("Failed to read frames")
                 break

@@ -2,7 +2,6 @@ import json
 import os
 import time
 import uuid
-from typing import cast
 
 import requests
 
@@ -10,6 +9,7 @@ from .status import Request, Status, Response, Keep, Ditch, New
 from .types import Config, FrameStrategy, MqttInfo
 from ..frames.frames_manager import FramesManager
 from ..frames.rtsp_reader import RtspReader
+from ..logger import logger
 
 
 def conf_from_obj(conf) -> Config:
@@ -26,7 +26,7 @@ def conf_from_obj(conf) -> Config:
 
 def response_from_obj(resp) -> Response:
     operation = resp['operation']['name']
-    print(operation)
+    logger.info(f'Response from balancer: {operation}')
     if operation == 'KEEP':
         return Response(operation=Keep())
     elif operation == 'DITCH':
@@ -69,11 +69,13 @@ class ConfigManager:
                 self.reload_config(operation.config)
 
     def ditch_current(self):
+        logger.info(f'Ditching current config')
         self._frames_manager = None
         self._rtsp_reader = None
         self._has_config = False
 
     def reload_config(self, config: Config):
+        logger.info(f'Reloading config to: {config}')
         if self._rtsp_reader:
             self._rtsp_reader.stop_capture()
         if self._frames_manager:

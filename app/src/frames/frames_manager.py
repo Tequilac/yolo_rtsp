@@ -7,6 +7,8 @@ from ..config.types import FrameStrategy, MqttInfo
 from .frame import FrameInfo
 from .yolo import Yolo
 
+from ..logger import logger
+
 
 def generate_detected_objects_info(result):
     info = []
@@ -50,9 +52,9 @@ class FramesManager:
     def connect_mqtt(self):
         def on_connect(client_instance, userdata, flags, rc):
             if rc == 0:
-                print("Connected to MQTT broker")
+                logger.info("Connected to MQTT broker")
             else:
-                print("Failed to connect to MQTT broker, return code %d\n", rc)
+                logger.warn("Failed to connect to MQTT broker, return code %d\n", rc)
         # Set Connecting Client ID
         try:
             client = mqtt_client.Client(self._mqtt_info.client_id)
@@ -73,11 +75,12 @@ class FramesManager:
             # result: [0, 1]
             status = result[0]
             if status == 0:
-                print(f"Send message to MQTT topic")
+                logger.info(f"Send message to MQTT topic")
             else:
-                print(f"Failed to send message to MQTT topic")
+                logger.warn(f"Failed to send message to MQTT topic")
+                logger.info(msg)
         else:
-            print(msg)
+            logger.info(msg)
 
     def stop(self):
         self.stop_yolo()

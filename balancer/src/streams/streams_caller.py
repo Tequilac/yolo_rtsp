@@ -11,8 +11,6 @@ class StreamsCaller:
         self.response = Response(status=200, headers={})
 
     def __call__(self, *args):
-        print('Received request: ' + request.json)
         params = json.loads(request.json)
         resp = self._streams_service.handle_request(params)
-        print(resp)
         return Response(status=200, headers={}, response=json.dumps(resp, default=lambda o: o.__dict__))

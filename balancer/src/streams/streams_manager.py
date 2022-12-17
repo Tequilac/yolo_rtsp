@@ -3,6 +3,7 @@ import uuid
 from typing import cast
 
 from balancer.src.config.types import Config
+from balancer.src.logger import logger
 from balancer.src.streams.status import StreamStatus, Free, Taken, Active
 
 
@@ -31,6 +32,7 @@ class StreamsManager:
         self.ditch_apps(to_be_ditched)
 
     def ditch_apps(self, app_ids: list[uuid.UUID]):
+        logger.info(f'Ditching inactive apps: {app_ids}')
         for idx, status in enumerate(self._statuses):
             if status.name == 'TAKEN':
                 if cast(Taken, status).app_id in app_ids:
@@ -40,6 +42,7 @@ class StreamsManager:
     def get_new_stream(self, app_id: uuid.UUID):
         for idx, status in enumerate(self._statuses):
             if status.name == 'FREE':
+                logger.info(f'Adding app: {app_id}')
                 self._statuses[idx] = Taken(app_id=app_id)
                 return self._config.streams[idx]
         return None
