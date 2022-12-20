@@ -36,5 +36,5 @@ class RtspReader:
                 time.sleep(self._frame_rate_timeout)
             else:
                 self._capture.release()
-                logger.warn("Failed to read frames")
+                logger.warning("Failed to read frames")
                 break

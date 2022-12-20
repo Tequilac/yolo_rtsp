@@ -54,7 +54,7 @@ class FramesManager:
             if rc == 0:
                 logger.info("Connected to MQTT broker")
             else:
-                logger.warn("Failed to connect to MQTT broker, return code %d\n", rc)
+                logger.warning("Failed to connect to MQTT broker, return code %d\n", rc)
         # Set Connecting Client ID
         try:
             client = mqtt_client.Client(self._mqtt_info.client_id)
@@ -77,7 +77,7 @@ class FramesManager:
             if status == 0:
                 logger.info(f"Send message to MQTT topic")
             else:
-                logger.warn(f"Failed to send message to MQTT topic")
+                logger.warning(f"Failed to send message to MQTT topic")
                 logger.info(msg)
         else:
             logger.info(msg)
