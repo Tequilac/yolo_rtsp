@@ -77,6 +77,7 @@ sudo docker buildx build --platform linux/arm64 -t tequilac/app -f docker/app/Do
 
 ### On Kubernetes cluster
 
+![Structure](./structure.png)
 Use the files provided in the `deployment` directory.
 Note that the images specified for the deployments were built for arm64 architecture.
 
