@@ -34,7 +34,7 @@ streams: # list of the configs for streams
 
 ### Frame strategy
 
-THere are two possible strategies for frames if the previous one hasn't finished being analyzed in the provided timeout:
+There are two possible strategies for frames if the previous one hasn't finished being analyzed in the provided timeout:
 * DROP - the new frame is dropped 
   (preferred if the frames should be analyzed as fast as possible at the expense of not analyzing every frame if it takes some time)
 * STORE - the new frame is stored and will start to be analyzed once the previous one finishes being analyzed
