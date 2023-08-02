@@ -46,6 +46,8 @@ class FramesManager:
         if self._frame_strategy == FrameStrategy.DROP:
             if not self._yolo.is_running():
                 self._stored_frames.append(frame_info)
+            else:
+                logger.info(f"Dropping frame")
         elif self._frame_strategy == FrameStrategy.STORE:
             self._stored_frames.append(frame_info)
 
